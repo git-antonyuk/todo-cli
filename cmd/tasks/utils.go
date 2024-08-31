@@ -7,7 +7,7 @@ import (
 )
 
 func getList() file_utils.TCsvData {
-	csvList, err := file_utils.ReadFromCSV("./data/db.csv")
+	csvList, err := file_utils.ReadFromCSV(FILE_PATH)
 	if err != nil {
 		csvList = [][]string{}
 	}

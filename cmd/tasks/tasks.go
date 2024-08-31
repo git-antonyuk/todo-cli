@@ -12,7 +12,7 @@ import (
 	"github.com/mergestat/timediff"
 )
 
-const filePath = "./data/db.csv"
+var FILE_PATH = "./data/db.csv"
 
 type Task struct {
 	ID          int64
@@ -45,7 +45,7 @@ func Add(description string) error {
 
 	data = append(data, taskRow)
 
-	err := file_utils.WriteToCSV(filePath, data)
+	err := file_utils.WriteToCSV(FILE_PATH, data)
 	if err != nil {
 		return err
 	}
@@ -53,11 +53,11 @@ func Add(description string) error {
 	return nil
 }
 
-func List(showAll bool) {
+func List(extended bool) {
 	w := tabwriter.NewWriter(os.Stdout, 1, 2, 3, ' ', tabwriter.Debug)
 	defer w.Flush()
 
-	if showAll {
+	if extended {
 		fmt.Fprintln(w, " ID \t Task \t Created  \t Done")
 	} else {
 		fmt.Fprintln(w, " ID \t Task \t Created ")
@@ -68,14 +68,12 @@ func List(showAll bool) {
 		timeDiff := timediff.TimeDiff(time.Now().Add(duration))
 		idStr := strconv.FormatInt(task.ID, 10)
 		isCompleteStr := strconv.FormatBool(task.isComplete)
-		if showAll {
+		if extended {
 			fmt.Fprintf(w, " %v \t %v \t %v \t %v \n", idStr, task.description, timeDiff, isCompleteStr)
 		} else {
 			fmt.Fprintf(w, " %v \t %v \t %v \n", idStr, task.description, timeDiff)
 		}
-
 	}
-
 }
 
 func Complete(id int64) error {
@@ -98,7 +96,7 @@ func Complete(id int64) error {
 		data = append(data, taskRow)
 	}
 
-	err := file_utils.WriteToCSV(filePath, data)
+	err := file_utils.WriteToCSV(FILE_PATH, data)
 	if err != nil {
 		return err
 	}
@@ -126,7 +124,7 @@ func Delete(id int64) error {
 		data = append(data, taskRow)
 	}
 
-	err := file_utils.WriteToCSV(filePath, data)
+	err := file_utils.WriteToCSV(FILE_PATH, data)
 	if err != nil {
 		return err
 	}

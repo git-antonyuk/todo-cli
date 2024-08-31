@@ -35,6 +35,7 @@ func closeFile(f *os.File) error {
 type TCsvData = [][]string
 
 func WriteToCSV(filepath string, data TCsvData) error {
+	// Lock file
 	loadedFile, err := loadFile(filepath)
 	if err != nil {
 		return err
